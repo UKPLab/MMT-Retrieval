@@ -1,0 +1,49 @@
+model_path:  YOUR_OUTPUT_PATH
+seed: 123456789
+wandb:
+  wandb_project: YOUR_WANDB_PROJECT
+  logging_steps: 10 # EVEN WITHOUT WANDB: log to console after this number of steps
+  #wandb_name: test
+use_wandb: True
+data:
+  #You only need to set the fields for the datasets that you use
+  mscoco_folder: SEE_README
+  image_feature_folder: SEE_README
+  flickr_split_folder: SEE_README
+  flickr30k_original_folder: SEE_README
+  cc_original_folder: SEE_README
+  cc_feature_folder: SEE_README
+  multi30k_original_folder: SEE_README
+model:
+  ## Load fine-tuned model
+  # Load fine-tuned model from this folder
+  model_path:  YOUR_MODEL
+  # For run_test_retrieve_rerank.py; load the cross-encoder and the embedding model
+  model_path_cross: YOUR_CROSS_ENCODER
+  model_path_embedding: YOUR_EMBEDDING_MODEL
+do_train: False
+do_dev_test: False # Use test config but use dev split
+do_test: True # Test on test split
+test:
+  tasks:
+    # Evaluate Embeddings for Image-Text Retrieval
+    - name: flickr30k # Alternative: mscoco, cc, multi30k
+      tiny: false
+      evaluator:
+        name: embedding_itr
+      data_args:
+        # Enable our proposed dataset enlargement for more challenging evaluation
+        # Use the images/ captions from the listet datasets as distraction/ noise but still only use the examples from the main dataset for evaluation
+        additional_datasets: [ mscoco,cc ]
+    # Evaluate retrieve-and-rerank approach
+    - name: flickr30k # Alternative: mscoco, cc, multi30k
+      tiny: false
+      retrieve: 20 # Number of candidates retrieved for re-ranking
+      evaluator:
+        name: rr_itr # emb_itr; ce_itr is really not recommended for time reasons
+      data_args:
+        # Enable our proposed dataset enlargement for more challenging evaluation
+        # Use the images/ captions from the listet datasets as distraction/ noise but still only use the examples from the main dataset for evaluation
+        additional_datasets: [mscoco,cc]
+  batchsize: 512
+

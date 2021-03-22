@@ -1,0 +1,35 @@
+model_path:  YOUR_OUTPUT_PATH
+seed: 123456789
+wandb:
+  wandb_project: YOUR_WANDB_PROJECT
+  logging_steps: 10 # EVEN WITHOUT WANDB: log to console after this number of steps
+  #wandb_name: test
+use_wandb: True
+data:
+  #You only need to set the fields for the datasets that you use
+  mscoco_folder: SEE_README
+  image_feature_folder: SEE_README
+  flickr_split_folder: SEE_README
+  flickr30k_original_folder: SEE_README
+  cc_original_folder: SEE_README
+  cc_feature_folder: SEE_README
+  multi30k_original_folder: SEE_README
+model:
+  ## Load fine-tuned model
+  # Load fine-tuned model from this folder
+  model_path:  YOUR_MODEL
+
+do_train: False
+do_dev_test: False # Use test config but use dev split
+do_test: True # Test on test split
+test:
+  tasks:
+    # Evaluate Cross Encoder for Image-Text Retrieval
+    - name: flickr30k # Alternative: mscoco, cc, multi30k
+      tiny: false  # for mscoco, tiny: true -> the 1k images test set
+      evaluator:
+        name: ce_itr
+      data_args:
+        languages: [en] #, de, cs, fr ] # ONLY multi30k, select the language. ONLY 1 Language at once for eval. Repeat this task for each language to evaluate all languages
+  batchsize: 512
+

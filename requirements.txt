@@ -1,0 +1,6 @@
+sentence_transformers>=0.4.1.2
+tqdm>=4.32.1
+requests>=2.22.0
+transformers>=4.1.1
+numpy>=1.19.3
+torch>=1.6.0

@@ -1,0 +1,129 @@
+model_path:  YOUR_OUTPUT_PATH
+seed: 123456789
+wandb:
+  wandb_project: YOUR_WANDB_PROJECT
+  logging_steps: 10 # EVEN WITHOUT WANDB: log to console after this number of steps
+  #wandb_name: test
+use_wandb: True
+data:
+  #You only need to set the fields for the datasets that you use
+  mscoco_folder: SEE_README
+  image_feature_folder: SEE_README
+  flickr_split_folder: SEE_README
+  flickr30k_original_folder: SEE_README
+  cc_original_folder: SEE_README
+  cc_feature_folder: SEE_README
+  multi30k_original_folder: SEE_README
+model:
+  ## Create a new model
+  name: oscar #Alternative: m3p, uniter/ villa. Decides which Transformer is used
+  pretrained_model_path: SEE_README
+  #Max text sequence length in tokens for input
+  max_seq_length: 70
+  #Max image regions for input
+  max_image_seq_len: 50
+  ##For Cross Encoder/ Joint Model. Ignored for Embedding Model
+  #Input key for classifier. Either CLS token (cls_token_embeddings) or the pooled CLS token (pooled_cls_token_embeddings)
+  input_key: pooled_cls_token_embeddings
+  #linear or mlp
+  classifier_type: linear
+  #For mlp; scaling factor for first layer
+  scaling_factor: 1
+#Enable training
+do_train: Train
+training:
+  tasks:
+    # Train Embedding with Triplet Loss
+    - name: flickr30k # Alternative: mscoco, multi30k; selects the training dataset
+      tiny: false
+      batchsize: 128
+      loss:
+        name: triplet
+        margin: 0.1
+      data_args:
+        jit_loading: False # True for just-in-time loading of image features from disk. Recommended for little RAM. Combine with num_workers to mitigate slowdown
+        languages: [en, de, cs, fr ] # ONLY multi30k, select the languages
+  ## ANCE based losses
+  ## Saved hard negatives are re-computed each epoch. Use epoch and steps_per_epoch for fine adjustments
+  ## With multiple ANCE-sampled losses, only topk of the first one is in effect because all losses use the same hard negatives.
+    # Train Embedding with Triplet Loss using ANCE-sampled negatives
+    - name: flickr30k # Alternative: mscoco, multi30k; selects the training dataset
+      batchsize: 16
+      tiny: false
+      loss:
+        name: ance
+        margin: 0.1
+      data_args:
+        jit_loading: False
+        topk: 50 # save the topk hardest negatives for sampling
+        negative_examples: 7 # number of sampled negative examples for each positive pair
+        sim_batchsize: 512 # cosine similarity batch size. required for very large similarity matrices
+    # Train Cross Encoder with Cross Entropy using ANCE-sampled negatives. Joint training only.
+    - name: flickr30k # Alternative: mscoco, multi30k; selects the training dataset
+      tiny: false
+      batchsize: 128
+      do_hard: True # enable ANCE-sampling
+      loss:
+        name: joint
+      data_args:
+        jit_loading: False
+        sim_batchsize: 512 # cosine similarity batch size. required for very large similarity matrices
+        topk: 50 # save the topk hardest negatives for sampling
+        hard_p: 0.05 # sample a hard negative with this probability, otherwise sample a random negative
+  dev:
+    tasks:
+      # Evaluate Embeddings for Image-Text Retrieval
+      - name: flickr30k # Alternative: mscoco, multi30k
+        tiny: false
+        evaluator:
+          name: embedding_itr
+        data_args:
+          languages: [en] #, de, cs, fr ] # ONLY multi30k, select the language. ONLY 1 Language at once for eval. Repeat this task for each language to evaluate all languages
+      # Evaluate Cross Encoder for Image-Text Retrieval
+      - name: flickr30k # Alternative: mscoco, multi30k
+        tiny: true # Recommended. Use a smaller dev set because Cross Encoder is slow
+        evaluator:
+          name: ce_itr
+        data_args:
+          captions_per_image: 1 # Recommended. Use only one caption per image because Cross Encoder is slow
+          languages: [en] #, de, cs, fr ] # ONLY multi30k, select the language. ONLY 1 Language at once for eval. Repeat this task for each language to evaluate all languages. Repeat this task for each language to evaluate all languages
+    batchsize: 512
+    main_score_function: mean
+  task_sequence: [0, 2, 1, 2] # For Multitask training, allows for adjustment how often each task is used each round. Number is the index in tasks-list.
+  use_amp: True # Automatix Mixed Precision during Training
+  epochs: 15
+  # ! Each step loops through EVERY loss in tasks list. So with 2 tasks, 2*steps_per_epoch losses will be done each epoch
+  steps_per_epoch: 1000 # Remove to run each epoch in full
+  evaluation_steps: 0 # Evaluation after each epoch and after this number of steps
+  warmup_steps: 0.0 # As a fraction of the total steps
+  lr: 0.00002
+  weight_decay: 0.05
+  max_grad_norm: 1
+  gradient_accumulation: 1
+  num_workers: 0 # Number of workers for DataLoader. 0 to disable
+do_dev_test: False # Use test config but use dev split
+do_test: True # Test on test split
+test:
+  tasks:
+    # Evaluate Embeddings for Image-Text Retrieval
+    - name: flickr30k # Alternative: mscoco, multi30k
+      tiny: false
+      evaluator:
+        name: embedding_itr
+      data_args:
+        languages: [en] #, de, cs, fr ] # ONLY multi30k, select the language. ONLY 1 Language at once for eval. Repeat this task for each language to evaluate all languages
+    # Evaluate Cross Encoder for Image-Text Retrieval
+    - name: flickr30k # Alternative: mscoco, multi30k
+      tiny: false
+      evaluator:
+        name: ce_itr
+      data_args:
+        languages: [en] #, de, cs, fr ] # ONLY multi30k, select the language. ONLY 1 Language at once for eval. Repeat this task for each language to evaluate all languages
+    # Evaluate retrieve-and-rerank approach
+    - name: flickr30k # Alternative: mscoco, multi30k
+      tiny: false
+      retrieve: 20 # Number of candidates retrieved for re-ranking
+      evaluator:
+        name: rr_itr
+  batchsize: 512
+

@@ -1,0 +1,79 @@
+model_path:  YOUR_OUTPUT_PATH
+seed: 123456789
+wandb:
+  wandb_project: YOUR_WANDB_PROJECT
+  logging_steps: 10 # EVEN WITHOUT WANDB: log to console after this number of steps
+  #wandb_name: test
+use_wandb: True
+data:
+  #You only need to set the fields for the datasets that you use
+  mscoco_folder: SEE_README
+  image_feature_folder: SEE_README
+  flickr_split_folder: SEE_README
+  flickr30k_original_folder: SEE_README
+  cc_original_folder: SEE_README
+  cc_feature_folder: SEE_README
+  multi30k_original_folder: SEE_README
+model:
+  ## Create a new model
+  name: oscar #Alternative: m3p, uniter/ villa. Decides which Transformer is used
+  pretrained_model_path: SEE_README
+  #Max text sequence length in tokens for input
+  max_seq_length: 70
+  #Max image regions for input
+  max_image_seq_len: 50
+  ##For Cross Encoder/ Joint Model. Ignored for Embedding Model
+  #Input key for classifier. Either CLS token (cls_token_embeddings) or the pooled CLS token (pooled_cls_token_embeddings)
+  input_key: pooled_cls_token_embeddings
+  #linear or mlp
+  classifier_type: linear
+  #For mlp; scaling factor for first layer
+  scaling_factor: 1
+#Enable training
+do_train: Train
+training:
+  tasks:
+    # Train Cross Encoder with Cross Entropy
+    - name: flickr30k # Alternative: mscoco, multi30k; selects the training dataset
+      tiny: false
+      batchsize: 128
+      loss:
+        name: joint
+      data_args:
+        jit_loading: False # True for just-in-time loading of image features from disk. Recommended for little RAM. Combine with num_workers to mitigate slowdown
+        languages: [en, de, cs, fr ] # ONLY multi30k, select the languages
+  dev:
+    tasks:
+      # Evaluate Cross Encoder for Image-Text Retrieval
+      - name: flickr30k # Alternative: mscoco, multi30k
+        tiny: true # Recommended. Use a smaller dev set because Cross Encoder is slow
+        evaluator:
+          name: ce_itr
+        data_args:
+          captions_per_image: 1 # Recommended. Use only one caption per image because Cross Encoder is slow
+          languages: [en] #, de, cs, fr ] # ONLY multi30k, select the language. ONLY 1 Language at once for eval. Repeat this task for each language to evaluate all languages
+    batchsize: 512
+    main_score_function: mean
+  use_amp: True # Automatix Mixed Precision during Training
+  epochs: 1
+  steps_per_epoch: 100000 # Remove to run each epoch in full
+  evaluation_steps: 5000 # Evaluation after each epoch and after this number of steps
+  warmup_steps: 0.0 # As a fraction of the total steps
+  lr: 0.00005
+  weight_decay: 0.05
+  max_grad_norm: 1
+  gradient_accumulation: 1
+  num_workers: 0 # Number of workers for DataLoader. 0 to disable
+do_dev_test: False # Use test config but use dev split
+do_test: True # Test on test split
+test:
+  tasks:
+    # Evaluate Cross Encoder for Image-Text Retrieval
+    - name: flickr30k # Alternative: mscoco, multi30k
+      tiny: false
+      evaluator:
+        name: ce_itr
+      data_args:
+        languages: [en] #, de, cs, fr ] # ONLY multi30k, select the language. ONLY 1 Language at once for eval. Repeat this task for each language to evaluate all languages
+  batchsize: 512
+
