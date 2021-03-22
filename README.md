@@ -36,15 +36,26 @@ If you find this repository helpful, feel free to cite our publication [Retrieve
 ```
 
 > **Abstract:** 
-> State-of-the-Art Vision and Language models jointly process images and text pairs to learn a shared representation-space. 
-> These Transformer-based models attend over all words and objects in an image, allowing for nuanced reasoning  over the respective modalities.
-Whilst being a powerful mechanism, this comes at cumbersome latency costs for image and text retrieval,
-making these \textit{cross-encoding} approaches impractical for realistic application scenarios.
-To mitigate this we propose a cooperative retrieve and rerank approach which utilizes pre-trained multimodal models.  Fine-tuned within a  twin-network we separately encode all items of a corpus, enabling
-efficient retrieval of images/text. Our cross-encoder component provides a more nuanced comparison of the input pairs allowing  smart reranking of the top retrieved items.
-We experiment on monolingual and multilingual benchmarks, leveraging recent multimodal models, and
-demonstrate that our approach achieves state-of-the-art results while being magnitudes faster in retrieval. We further propose a larger and harder  benchmark, on which we show that
-results on smaller test sets are inflated and misleading.
+> Current state-of-the-art approaches to cross-modal retrieval process text and 
+> visual input jointly, relying on Transformer-based architectures with 
+> cross-attention mechanisms that attend over all words and objects in an image. 
+> While offering unmatched retrieval performance, such models: \textbf{1)} 
+> are typically pretrained from scratch and thus less scalable, \textbf{2)} 
+> suffer from huge retrieval latency and inefficiency issues, which makes 
+> them impractical in realistic applications. To address these crucial gaps 
+> towards both improved and efficient cross-modal retrieval, we propose a novel 
+> fine-tuning framework which turns any pretrained text-image multi-modal model
+> into an efficient retrieval model. The framework is based on a cooperative 
+> retrieve-and-rerank approach which combines: \textbf{1)} twin networks to
+> separately encode all items of a corpus, enabling efficient initial 
+> retrieval, and \textbf{2)} a cross-encoder component for a more nuanced
+> (i.e., smarter) ranking of the retrieved small set of items. 
+> We also propose to jointly fine-tune the two components with shared weights, 
+> yielding a more parameter-efficient model. Our experiments on a series of 
+> standard cross-modal retrieval benchmarks in monolingual, multilingual, 
+> and zero-shot setups, demonstrate improved accuracy and huge efficiency 
+> benefits over the state-of-the-art cross-encoders.
+
 
 Don't hesitate to send me an e-mail or report an issue, if something is broken or if you have further questions or feedback.
 
