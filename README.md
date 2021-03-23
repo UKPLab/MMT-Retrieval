@@ -17,7 +17,7 @@ We also provide our fine-tuned image-text-retrieval models for download, so you 
 Check out [our example for Image Search on MSCOCO using our fine-tuned models here](examples/applications/Image_Search.ipynb).
 
 ## Citing & Authors
-If you find this repository helpful, feel free to cite our publication [Retrieve Fast, Rerank Smart: Cooperative and Joint Approaches for Improved Cross-Modal Retrieval](ARXIV URL):
+If you find this repository helpful, feel free to cite our publication [Retrieve Fast, Rerank Smart: Cooperative and Joint Approaches for Improved Cross-Modal Retrieval](https://arxiv.org/abs/2103.11920):
 ```
 @article{geigle:2021:arxiv,
   author    = {Gregor Geigle and 
@@ -27,11 +27,11 @@ If you find this repository helpful, feel free to cite our publication [Retrieve
                 Iryna Gurevych},
   title     = {Retrieve Fast, Rerank Smart: Cooperative and Joint Approaches for Improved Cross-Modal Retrieval},
   journal   = {arXiv preprint},
-  volume    = {abs/2103.TODO},
+  volume    = {abs/2103.11920},
   year      = {2021},
-  url       = {http://arxiv.org/abs/2103.TODO},
+  url       = {http://arxiv.org/abs/2103.11920},
   archivePrefix = {arXiv},
-  eprint    = {2103.TODO}
+  eprint    = {2103.11920}
 }
 ```
 
