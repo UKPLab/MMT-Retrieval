@@ -142,7 +142,7 @@ All currently supported models require a pre-processing step
 where we extract the regions of interest (which serve as image input analog to tokens for the language input) from the images using a Faster R-CNN object detection model.
 
 Which detection model is needed, depends on the model that you are using.
-Check out [our guide](image_features_doc.md) where we have gathered all needed information to get startet.
+Check out [our guide](documentation/image_features.md) where we have gathered all needed information to get startet.
 
 If available, we also point to already pre-processed image features that can be downloaded for a quicker start.
 

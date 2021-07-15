@@ -251,7 +251,7 @@ class OSCAR(nn.Module):
         pad_seq_length = min(pad_seq_length, self.max_seq_length, self.auto_model.config.max_position_embeddings-2) + 2 #Add space for special tokens
 
         if len(tokens) == 0 or isinstance(tokens[0], int):
-            return self.tokenizer.encode_plus(self.tokenizer.convert_ids_to_tokens(tokens), is_split_into_words=True, max_length=pad_seq_length, pad_to_max_length=True, return_tensors="pt")
+            return self.tokenizer.encode_plus(self.tokenizer.convert_ids_to_tokens(tokens), max_length=pad_seq_length, pad_to_max_length=True, return_tensors="pt")
         else:
             return self.tokenizer.encode_plus(self.tokenizer.convert_ids_to_tokens(tokens[0]), self.tokenizer.convert_ids_to_tokens(tokens[1]), max_length=pad_seq_length, pad_to_max_length=True, return_tensors="pt")
 
