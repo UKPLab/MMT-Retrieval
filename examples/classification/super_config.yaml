@@ -1,0 +1,46 @@
+model_path:  YOUR_OUTPUT_PATH
+seed: 123456789
+wandb:
+  wandb_project: YOUR_WANDB_PROJECT
+  logging_steps: 10 # EVEN WITHOUT WANDB: log to console after this number of steps
+  #wandb_name: test
+use_wandb: True
+
+model:
+  # Load fine-tuned model from this folder
+  model_path:  YOUR_MODEL
+  ## Create a new model
+  name: m3p #Alternative: m3p, uniter/ villa. Decides which Transformer is used
+  pretrained_model_path: SEE_README
+  #Max text sequence length in tokens for input
+  max_seq_length: 70
+  #Max image regions for input
+  max_image_seq_len: 50
+  ##For Cross Encoder/ Joint Model. Ignored for Embedding Model
+  #Input key for classifier. Either CLS token (cls_token_embeddings) or the pooled CLS token (pooled_cls_token_embeddings)
+  input_key: pooled_cls_token_embeddings
+  #linear or mlp
+  classifier_type: linear
+  #For mlp; scaling factor for first layer
+  scaling_factor: 1
+  num_labels: 2
+#Enable training
+do_train: Train
+training:
+  dev:
+    batchsize: 512
+  use_amp: True # Automatix Mixed Precision during Training
+  epochs: 1
+  steps_per_epoch: 40000 # Remove to run each epoch in full
+  evaluation_steps: 5000 # Evaluation after each epoch and after this number of steps
+  warmup_steps: 0.0 # As a fraction of the total steps
+  lr: 0.00002
+  weight_decay: 0.05
+  max_grad_norm: 1
+  gradient_accumulation: 1
+  num_workers: 0 # Number of workers for DataLoader. 0 to disable
+do_dev_test: False # Use test config but use dev split
+do_test: True # Test on test split
+test:
+  batchsize: 512
+
