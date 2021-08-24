@@ -25,7 +25,19 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 ### Implement yourself. See ../experiments/process_data.py for an example.
 ### Take care to load the image features in the image_dict using the provided methods. See documentation/image_features.md for more
 def load_data(split, image_dict):
-    return None
+    image_ids = []
+    questions = []
+    labels = []
+
+    #loading data
+
+    image_dict.load#....
+
+    if split == "train":
+        return YourClassificationDataset(image_ids, questions, labels) # __getitem__ -> [[image_id, question]], [label]
+    else:
+        return dict(image_ids=image_ids, questions=questions, labels=labels)
+
 
 def run(config):
     if "seed" in config:
@@ -61,7 +73,7 @@ def run(config):
         dev_config = train_config["dev"]
         split_dataset = load_data("dev", model.image_dict) # Implement yourself
         file_name = f"dev-acc"
-        dev_evaluator = ImageQuestionClassification(split_dataset["images"], split_dataset["captions"], split_dataset["labels"],
+        dev_evaluator = ImageQuestionClassification(split_dataset["images"], split_dataset["questions"], split_dataset["labels"],
                                                 name=file_name, batch_size=dev_config["batchsize"])
         optimizer_class = transformers.AdamW
         optimizer_params={"lr": train_config.get("lr", 2e-5), "eps": train_config.get("eps", 1e-6)}
@@ -99,7 +111,7 @@ def run(config):
             wandb.watch(model)
         split_dataset = load_data("dev", model.image_dict) # Implement yourself
         file_name = f"dev-acc"
-        evaluator = ImageQuestionClassification(split_dataset["images"], split_dataset["captions"], split_dataset["labels"],
+        evaluator = ImageQuestionClassification(split_dataset["images"], split_dataset["questions"], split_dataset["labels"],
                                                 name=file_name, batch_size=dev_config["batchsize"])
         evaluator(model, output_path=model_save_path)
         
@@ -117,7 +129,7 @@ def run(config):
 
         split_dataset = load_data("test", model.image_dict) # Implement yourself
         file_name = f"test-acc"
-        evaluator = ImageQuestionClassification(split_dataset["images"], split_dataset["captions"], split_dataset["labels"],
+        evaluator = ImageQuestionClassification(split_dataset["images"], split_dataset["questions"], split_dataset["labels"],
                                             name=file_name, batch_size=test_config["batchsize"])
         evaluator(model, output_path=model_save_path)
 
