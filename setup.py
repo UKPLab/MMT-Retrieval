@@ -5,7 +5,7 @@ with open("README.md", mode="r", encoding="utf-8") as readme_file:
 
 setup(
     name="mmt-retrieval",
-    version="0.1.1",
+    version="0.1.2",
     author="Gregor Geigle",
     author_email="gregor.geigle@gmail.com",
     description="Multimodal Transformers for Image-Text Retrieval and more",
@@ -15,7 +15,7 @@ setup(
     url="https://github.com/UKPLab/MMT-Retrieval",
     packages=find_packages(),
     install_requires=[
-        "sentence_transformers>=0.4.1.2",
+        "sentence_transformers>=0.4.1.2,<=1.2.1",
         "tqdm>=4.32.1",
         "requests>=2.22.0",
         "transformers>=4.1.1",

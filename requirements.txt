@@ -1,4 +1,4 @@
-sentence_transformers>=0.4.1.2
+sentence_transformers>=0.4.1.2,<=1.2.1
 tqdm>=4.32.1
 requests>=2.22.0
 transformers>=4.1.1

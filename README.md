@@ -73,7 +73,7 @@ https://www.tu-darmstadt.de/
 ## Installation
 We recommend **Python 3.6** or higher, **[PyTorch 1.6.0](https://pytorch.org/get-started/locally/)** or higher,
 **[transformers v4.1.1](https://github.com/huggingface/transformers)** or higher,
-and **[sentence-transformer 0.4.1](https://github.com/UKPLab/sentence-transformers)** or higher.
+and **[sentence-transformer 0.4.1](https://github.com/UKPLab/sentence-transformers)** or higher up to 1.2.1.
 
 
 **Install with pip**
