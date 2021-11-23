@@ -81,7 +81,7 @@ def _flickr_image_feature_split(flickr_split_folder, flickr30k_original_folder, 
     :param flickr30k_original_folder: https://github.com/BryanPlummer/flickr30k_entities. Unzip annotations.zip
     :param image_feature_folder: Folder with downloaded .tsv feature files
     https://github.com/jnhwkim/ban-vqa/blob/master/tools/download_flickr.sh
-    https://drive.google.com/uc?export=download&id=11OD_qq7ITBarJwWZfi0bWIRw3HPEaHwE
+    https://public.ukp.informatik.tu-darmstadt.de/geigle/mmt-retrieval/flickr30k_features.zip
     :param split: test/ train/ dev
     :return:
     """

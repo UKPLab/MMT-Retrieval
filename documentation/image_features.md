@@ -33,7 +33,7 @@ See discussion here https://github.com/microsoft/Oscar/issues/49)
 ### Download
 You can download the already extracted features for MSCOCO and Flickr30 
 [here for MSCOCO](https://storage.googleapis.com/up-down-attention/trainval.zip) (credit to https://github.com/peteanderson80/bottom-up-attention#pretrained-features) 
-and [here for Flickr30k](https://drive.google.com/uc?export=download&id=11OD_qq7ITBarJwWZfi0bWIRw3HPEaHwE) 
+and [here for Flickr30k](https://public.ukp.informatik.tu-darmstadt.de/geigle/mmt-retrieval/flickr30k_features.zip) 
 (credits to BAN: https://github.com/jnhwkim/ban-vqa/blob/master/tools/download_flickr.sh) 
 in the .tsv format.
 

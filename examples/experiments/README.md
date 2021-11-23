@@ -18,7 +18,7 @@ In the configs (see below), set `model.pretrained_model_path` to the destination
 In the configs (see below), set `data.mscoco_folder` to the destination folder.
 
 **Flickr30k:** Download https://github.com/BryanPlummer/flickr30k_entities. Unzip annotations.zip to get the captions. 
-Download the image features from https://drive.google.com/uc?export=download&id=11OD_qq7ITBarJwWZfi0bWIRw3HPEaHwE (source: https://github.com/jnhwkim/ban-vqa/blob/master/tools/download_flickr.sh).
+Download the image features from https://public.ukp.informatik.tu-darmstadt.de/geigle/mmt-retrieval/flickr30k_features.zip (source: https://github.com/jnhwkim/ban-vqa/blob/master/tools/download_flickr.sh).
 Our code will create .tsv files for the splits for both the captions and the features.
 In the configs (see below), 
 set `data.image_feature_folder` to the destination folder for the image features, 
