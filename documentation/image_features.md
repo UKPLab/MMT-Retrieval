@@ -57,7 +57,7 @@ model.image_dict.load_oscar_format_image_features(feature_file) # for Oscar's .p
 ## M3P
 ### Generate
 
-M3P extracts the features using [this script](https://github.com/facebookresearch/mmf/blob/master/tools/scripts/features/extract_features_vmb.py) with the
+M3P extracts the features using [our scripts](../feature_extraction/extract_features_vmb.py) [based on this script](https://github.com/facebookresearch/mmf/blob/master/tools/scripts/features/extract_features_vmb.py) with the
 ResNet-101 backbone (that is ``model_name='X-101'``) and otherwise the default parameters.
 Note that the script does not use the mmf package except for downloading the model weights and the config - if you download these files manually, you can comment the import statement out and do not have to install mmf.
 
